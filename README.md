@@ -34,7 +34,7 @@ All EMS calls through SFFD available through [sfgov.org](https://data.sfgov.org/
 #### Cleaned Data
 -Ended with ~2.6 M rows of useable EMS calls spanning April 2000 to present (July 2020)
 
--Separated data by neighborhood of event
+-Separated data by neighborhood of event (but left combined for model selection)
 
 -Aggregated data in 3H time periods
 
@@ -47,59 +47,68 @@ All EMS calls through SFFD available through [sfgov.org](https://data.sfgov.org/
 
 ![Daily Seasonality](/Photos/Daily_Neigh.png)
 
-##### ^All time measurements seemed to match up similarly, so used the total time (call to scene)
+[Back To The Top](#read-me-template)
+
+---
+
+## Models (All Neighborhoods Combined)
+### SARMIAX
+
+Used a ARIMA model with a seasonality feature to capture daily seasonality of data.
+
+This model proved to be computationally expensive with the amount of data I was working with. Additionally, since SARIMAX does not handle multi-seasonality well, I decided to run the model using 3 weeks to predict a 4th week.
+
+**Setup:** Picked initial hyperparameters using correlation/autocorrelation and then performed a grid search and chose model with lowest RMSE
+
+![SARIMAX Model 1 Week Prediction](/Photos/ARIMA_pred.png)
+#### Second half of model is test data, first half is train data
+
+**RSME**  = 7.4
+
+### Prophet
+
+Used a Prophet model to capture multi-seasonality in data.
+
+This model was much less computationally expensive. I limited my data to a 2 year stretch and and trained the model on the full two years up until the week to be forecast.
+
+**Setup:** Used default parameters for Prophet model
+
+![Prophet Model 1 Week Prediction](/Photos/Proph_pred_week.png)
+#### Second half of model is test data, first half is train data
+
+**RSME**  = 7.2
+
+### Control
+
+Used the previous week to predict the current week
+
+**RSME**  = 8.8
 
 [Back To The Top](#read-me-template)
 
 ---
 
-## Models
-### First
-**Null Hypothesis:** Areas with high homeless population have same response rate as areas with low homeless population.
+## By Neighborhood
+### Best Model
+The Model that I selected for further analysis was the Prophet model because it scored higher
 
-**Alternative Hypothesis:** Areas with high homeless population have different response rate as areas with low homeless population.
+### Daily (2 week period)
 
-**P-Value** of 0.02 for rejection
+~[Daily Rates by Neighborhood](/Photos/3H_Daily_Neigh.png)
 
-### Second
-I wanted to investigate my data a bit further, so I decided to break up the data into calls that were life-threatening and calls that were not life threatening. I did not perform EDA on this data but used it in another hypothesis test.
+### Weekly
 
-**Null Hypothesis:** Calls marked as life-threatening have same response rate as calls marked as non-life threatening.
-
-**Alternative Hypothesis:** Calls marked as life-threatening have different response rate as calls marked as non-life threatening.
-
-**P-Value** of 0.02 for rejection
+~[Weekly Rates by Neighborhood](/Photos/Daily_Pred_Neigh.png)
 
 
-[Back To The Top](#read-me-template)
+## Next Steps
+-The models should be tested on larger sets of data to confirm accuracy. 
 
----
+-The available parameters for both SARIMAX and Prophet can explored and optimized further to capture higher level seasonality better
 
-## Results
-### First
-High Pop Avg: 530 seconds
+-The models can be expanded to be utilized for anomaly detection, which can be used to explore non-seasonal feature that may be good indicators of EMS call rates.
 
-Low Pop Avg: 516 seconds
-
-P-Value: 0.0 (very very low)
-
-**Reject Null Hypothesis**
-
-![Homeless Hist](/High_to_Low_Homeless_Hist.png)
-
-### Second
-Life Threatening Avg: 508 seconds
-
-Non-Life Threatening Avg: 528 seconds
-
-P-Value: 4 e-214
-
-**Reject Null Hypothesis**
-
-![Homeless Hist](/Life_Threat_to_Non_Hist.png)
-
-## Takeaway
-The data suggests with very high confidence that the areas with low homeless populations in San Francisco have a slightly faster EMS response time, and that calls marked as life-threatening have a faster response time. The high confidence is not surprising as this dataset included all EMS calls in San Francisco, so was the population data. There is not suggestion of causation in this analysis.
+-An LSTM model can be trained to take in features of the data (like call type/severity/weather/etc) which may build a stronger model.
 
 [Back To The Top]
 
