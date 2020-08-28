@@ -94,11 +94,11 @@ The Model that I selected for further analysis was the Prophet model because it 
 
 ### Daily (2 week period)
 
-~[Daily Rates by Neighborhood](/Photos/3H_Daily_Neigh.png)
+![Daily Rates by Neighborhood](/Photos/3H_Daily_Neigh.png)
 
 ### Weekly
 
-~[Weekly Rates by Neighborhood](/Photos/Daily_Pred_Neigh.png)
+![Weekly Rates by Neighborhood](/Photos/Daily_Pred_Neigh.png)
 
 
 ## Next Steps
