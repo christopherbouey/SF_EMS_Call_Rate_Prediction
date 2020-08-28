@@ -1,13 +1,13 @@
 # SF_EMS_Call_Rate_Prediction
 
 ### Table of Contents
-You're sections headers will be used to reference location of destination.
 
 - [Description](#description)
 - [Data Overview](#data-overview)
 - [Data Exploration](#data-exploration)
 - [Models](#models)
-- [Takeaway](#takeaway)
+- [By Neighborhood](#by-neighborhood)
+- [Next Steps](#next-steps)
 
 ---
 
